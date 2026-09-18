@@ -1,22 +1,36 @@
 name: Test
 
 on:
-  - push
-  - pull_request
+  push:
+  pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          node-version: 12
-      - name: install
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install
         run: npm ci
-      - name: test
+
+      - name: Test
         run: npm test
-      - uses: actions/upload-artifact@v1
+
+      - name: Upload test artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: test-${{github.sha}}
+          name: test-${{ github.sha }}
           path: test
