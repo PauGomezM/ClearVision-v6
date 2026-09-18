@@ -120,3 +120,8 @@ dist
 # ClearVision build & test files
 public/
 test/
+
+# Local environment and secret files
+.env
+.env.*
+!.env.example
